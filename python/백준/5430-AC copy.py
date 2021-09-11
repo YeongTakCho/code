@@ -38,4 +38,5 @@ for test in range(testsNum):
         continue
     elif key==0:
         print(nums)
+        #test
             
