@@ -1,15 +1,37 @@
 n=int(input())
-nstr=['I']
-for i in range(n):
-    nstr.append('O')
-    nstr.append('I')
-nstr=''.join(nstr)
 m=int(input())
 S=input()
-
 count=0
-for pos in range(m-n*2):
-    pstr=S[pos:pos+n*2+1]
-    if pstr==nstr:
-        count+=1
+
+past=0 #0(O)or1(I)
+persist=0
+persistLen=int()
+for s in S:
+    if s=='I':
+        if persist==0:
+            persist=1
+            persistLen=0
+        elif persist==1:
+            if past==0:
+                persistLen+=1
+            elif past==1:
+                if persistLen>=n:
+                    count+=(persistLen-n+1)
+                persistLen=0
+        past=1
+    elif s=='O':
+        if persist==0:
+            pass
+        elif persist==1:
+            if past==1:
+                pass
+            elif past==0:
+                if persistLen>=n:
+                    count+=(persistLen-n+1)
+                persist=0
+                persistLen=0
+        past=0
+if persistLen>=n:
+    count+=(persistLen-n+1)
 print(count)
+
