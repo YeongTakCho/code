@@ -1,20 +1,54 @@
-import sys
-testcaseNum=int(input())
-m=[];n=[];x=[];y=[]
-for i in range(testcaseNum):
-    _m,_n,_x,_y=map(int,sys.stdin.readline().strip().split())
-    m.append(_m);n.append(_n);x.append(_x);y.append(_y)
-for i in range(testcaseNum):
-    mset=set();nset=set()
-    _m=m[i];_n=n[i];_x=x[i];_y=y[i]
-    max=_m*_n
-    for num in range(_x,max+1,_m):
-        mset.add(num)
-    for num in range(_y,max+1,_n):
-        nset.add(num)
-    if mset&nset:
-        a=sorted(list(map(int,mset&nset)))
-        print(a[0])
-    else:
-        print(-1)
+def num(m,n,x,y):
+    while x<=m*n:
+        if x%n==y: #n==y일경우 포함 x
+            return x
+        x+=m
+    return -1
 
+testcase=int(input())
+for i in range(testcase):
+    m,n,x,y=map(int,input().split())
+    print(num(m,n,x,y))
+
+# from sys import stdin
+
+# # first-class func
+# rd = stdin.readline
+
+# def get_gcd(n1, n2):
+#     while n1 % n2:
+#         tmp = n1
+#         n1 = n2
+#         n2 = tmp % n2
+    
+#     return n2
+
+
+# def get_lcm(n1, n2):
+#     gcd = get_gcd(n1, n2)
+#     last_year = n1*n2//gcd
+
+#     return last_year
+
+# def get_inca_year(M, N, x, y):
+#     last_year = get_lcm(M,N)
+#     y = 0 if y == N else y
+    
+#     for year in range(x,last_year+1,M):
+#         if year % N == y:
+#             return year
+
+#     return -1
+
+
+# if __name__ == "__main__":
+#     T = int(rd())
+
+#     for _ in range(T):
+#         M, N, x, y = map(int, rd().split())
+#         if M > N:
+#             M, N = N, M
+#             x, y = y, x
+
+#         ans = get_inca_year(M, N, x, y)
+#         print(ans)
