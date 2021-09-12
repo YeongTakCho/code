@@ -4,14 +4,17 @@ m=[];n=[];x=[];y=[]
 for i in range(testcaseNum):
     _m,_n,_x,_y=map(int,sys.stdin.readline().strip().split())
     m.append(_m);n.append(_n);x.append(_x);y.append(_y)
-for testcase in range(testcaseNum):
-    key=0
-    _m=m[testcase];_n=n[testcase];_x=x[testcase];_y=y[testcase]
-    max= int(_m*_n/2) if _m*_n%2==0 else _m*_n
-    for num in range(1,max+1):
-        if num%_m==_x and num%_n==_y:
-            print(num)
-            key=1
-            break
-    if key==0:
+for i in range(testcaseNum):
+    mset=set();nset=set()
+    _m=m[i];_n=n[i];_x=x[i];_y=y[i]
+    max=_m*_n
+    for num in range(_x,max+1,_m):
+        mset.add(num)
+    for num in range(_y,max+1,_n):
+        nset.add(num)
+    if mset&nset:
+        a=sorted(list(map(int,mset&nset)))
+        print(a[0])
+    else:
         print(-1)
+
