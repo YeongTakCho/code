@@ -40,7 +40,7 @@ for t in range(T):
             except:
                 biggest=None
                 smallest=None
-    if biggest==int():
+    if biggest==None:
         print('EMPTY')
     else:
         print(biggest,smallest)
