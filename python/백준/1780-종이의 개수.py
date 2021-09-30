@@ -4,7 +4,7 @@ def quardTree(x,y,Len):
     global nums, result
     color=nums[y][x]
     if Len=='1':
-        result.append(color)
+        result[int(color)+1]+=1
         return
     breakFor=False
     for _y in range(y,y+Len):
@@ -15,21 +15,21 @@ def quardTree(x,y,Len):
         if breakFor==True:
             break
     if breakFor==False:
-        result.append(color)
+        result[int(color)+1]+=1
     else:
-        result.append('(')
-        quardTree(x,y,Len//2)
-        quardTree(x+Len//2,y,Len//2)
-        quardTree(x,y+Len//2,Len//2)
-        quardTree(x+Len//2,y+Len//2,Len//2)
-        result.append(')')
+        nLen=Len//3
+        for i in range(3):
+            for j in range(3):
+                quardTree(x+nLen * i,y+nLen* j , nLen)
 
         
-result=list()
+result=[0,0,0]
 read=sys.stdin.readline
 N=int(read())
 nums=list()
 for _ in range(N):
-    nums.append(read().rstrip())
+    nums.append(read().split())
 quardTree(0,0,N)
-print(''.join(result))
+for _ in range(3):
+    print(result[_])
+#https://www.acmicpc.net/source/33652204
