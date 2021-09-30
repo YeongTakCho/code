@@ -7,4 +7,4 @@ else:
     while start<n:
         dp.append(dp[start]+dp[start-1]*2)
         start+=1
-    print(dp[n])
+    print(dp[n]%10007)
