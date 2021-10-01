@@ -1,18 +1,17 @@
 import sys,heapq
-read=sys.stdin.readline
+read = sys.stdin.readline
 
-n = int(read())
-N=[int(read()) for _ in range(n)]
-arr=list()
-result=list()
-for i in range(n):
-    inN=N[i]
-    if inN !=0:
-        heapq.heappush(arr,((abs(inN),True if inN>0 else False)))
-    elif inN ==0:
-        if arr:
-            result.append(heapq.heappop(arr))
+def solution():
+    h=list()
+    n=int(read())
+    for _ in range(n):
+        inN=int(read())
+
+        if inN:
+            heapq.heappush(h,(abs(inN),inN))
         else:
-            result.append((0,True))
-for value in result:
-    print(value[0] if value[1] else value[0] * -1)
+            if h:
+                print(heapq.heappop(h)[1])
+            else:
+                print(0)
+solution()
