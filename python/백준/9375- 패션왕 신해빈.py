@@ -27,3 +27,5 @@ for t in range(Testcase):
 
 for v in result:
     print(v)
+
+    #https://www.acmicpc.net/source/33878942
