@@ -1,7 +1,7 @@
 n=int(input())
 dp=[0,1,3]
 if n<=2:
-    print(dp[2])
+    print(dp[n])
 else:
     start=2
     while start<n:
