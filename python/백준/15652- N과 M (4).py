@@ -1,5 +1,5 @@
 N, M = map(int,input().split())
-nums = list(set(map(int,input().split()))); nums.sort()
+nums = [i for i in range(1, N+1)]
 
 arr= [0] * M
 data = list()

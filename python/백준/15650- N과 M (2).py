@@ -1,5 +1,5 @@
 N, M = map(int,input().split())
-nums = list(set(map(int,input().split()))); nums.sort()
+nums = [i for i in range(1, N+1)]
 
 arr= [0] * M
 data = list()
@@ -10,7 +10,7 @@ def recurse(hight: int, repeat_list : list , arr : list, MAX : int , result : li
         arr[hight] = repeat_list[i]
 
         if hight < MAX - 1:
-            recurse(hight +1, repeat_list[i:], arr, MAX, result)
+            recurse(hight +1, repeat_list[i+1:], arr, MAX, result)
         else:
             result.append(arr.copy())
 
