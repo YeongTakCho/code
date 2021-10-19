@@ -4,18 +4,28 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def blog_crawling():
-    url = input('input url: ')
+def makeAcmicpcProblem():
     path = 'C:\\Users\\s_andycho1120\\code\\python\\백준\\'
 
+
+
+    print('!!! WARNING : IT IS ONLY FOR ACMICPC.NET PROBLEM URL !!!')
+
+    url = input('input url: ')
     
+    if url[:32] != 'https://www.acmicpc.net/problem/':
+        
+        print('\n THAT IS WRONG URL, PLEASE CHECK YOUR URL\n')
+        return
+
+
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
-    spans = [span for span in soup.select('span')]
+    title = str(soup.select('title'))
 
-    problem_num = str(spans[3])[26:-12]
-    problem_name= str(spans[4])[25:-7]
-
+    problem_num = url[32:]
+    problem_name= title[len(problem_num)+11:-9]
+    
     file_name= path + problem_num +'- ' + problem_name + '.py'
 
     if os.path.isfile(file_name):
@@ -31,6 +41,8 @@ def blog_crawling():
         open(file_name,'w')
         print('File is created')
 
-    os.system('pause')
     
-blog_crawling()
+
+    
+makeAcmicpcProblem()
+os.system('pause')
