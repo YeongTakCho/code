@@ -23,8 +23,6 @@ class binary_tree:
                 data_dict[parent].right = self.Node(right)
                 data_dict[right] = data_dict[parent].right
 
-        return self.root
-
     def preorder(self):
         def _preorder(parentNode : self.Node):
             print(parentNode.data, end='')
