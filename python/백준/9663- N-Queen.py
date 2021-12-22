@@ -1,20 +1,26 @@
-#https://velog.io/@rapsby/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-N-Queen-python
-def dfs(queen, row, n):
-    count = 0
-    if n == row:
-        return 1
-    for col in range(n):
-        queen[row] = col
-        for i in range(row):
-            if queen[i] == queen[row]:
-                break
-            if abs(queen[i]-queen[row]) == row - i:
-                break
-        else:
-            count += dfs(queen, row + 1, n)
-    return count
+#https://www.acmicpc.net/source/36027355
+N = int(input())
 
-def solution(n):
-    return dfs([0]*n, 0, n)
+cnt = 0
 
-print(solution(int(input())))
+bd = [False]*N          # idx는 j
+diag1 = [False]*(2*N)   # idx는 i+j
+diag2 = [False]*(2*N)   # idx는 i-j
+
+# 다음 i번째 퀸을 j에 놓을 수 있는지 확인하는 함수.
+def f(i):
+    # 끝에 도달하면 종료
+    if i == N:
+        # print(bd)
+        global cnt; cnt +=1
+        return
+    # 1. j값이 앞에랑 걸리는게 있는지?
+    # 2. 대각선에 걸리는게 있는지?
+    for j in range(N):
+        if not (bd[j] or diag1[i+j] or diag2[i-j]) :
+            bd[j] = diag1[i+j] = diag2[i-j] = True
+            f(i+1)
+            bd[j] = diag1[i+j] = diag2[i-j] = False
+        
+f(0)
+print(cnt)
