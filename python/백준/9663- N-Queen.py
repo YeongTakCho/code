@@ -1,23 +1,20 @@
-#참고: https://goplanit.site/46.%20Algorithm(9663_py)/
-def queen(n,N):
-    global result
-    if n==N:
-        result +=1
-        return
-    else:
-        for i in range(N):
-            row[n] =i
-            key= True
-            for j in range(n):
-                if row[j] == row[n] or (row[n]-n) == (row[j] - j) or (row[n] +n) == (row[j]+j):
-                    key= False
-                    break
-            if key:
-                queen(n+1,N)
-        
-s = int(input())
-result = 0
-row = [300] * s
-queen(0, s)
+#https://velog.io/@rapsby/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-N-Queen-python
+def dfs(queen, row, n):
+    count = 0
+    if n == row:
+        return 1
+    for col in range(n):
+        queen[row] = col
+        for i in range(row):
+            if queen[i] == queen[row]:
+                break
+            if abs(queen[i]-queen[row]) == row - i:
+                break
+        else:
+            count += dfs(queen, row + 1, n)
+    return count
 
-print(result)
+def solution(n):
+    return dfs([0]*n, 0, n)
+
+print(solution(int(input())))
