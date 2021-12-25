@@ -1,57 +1,47 @@
-#시간초과
-import sys
-read= sys.stdin.readline
+#heapq 사용한 풀이
+import sys; read= sys.stdin.readline
+import heapq
+INF = sys.maxsize
 
-def sol(): #Dijkstra algorithm
-    Vn, En = map(int,read().split())
-    S= [int(read()) -1] #starts
-    D= ['INF' for _ in range(Vn)]; D[S[0]] = 0 #shortest way value (can be changed in progress)
-    C= [dict() for _ in range(Vn)] #line
-    V= [False for _ in range(Vn)]; V[S[0]] = True #V[i] = D[i] is shortest (D[i] is not changed anymore)
+def sol():
+    #꼭짓점 갯수와 모서리 갯수 입력
+    nVertex, nExcreta = map(int,read().split())
+    #시작점 (0부터 시작)
+    s= int(read()) -1 
+
+    dist=[INF for _ in range(nVertex)]; dist[s] = 0
+    graph = [[] for _ in range(nVertex)]
     
-    #input lines
-    for _ in range(En):
+    for _ in range(nExcreta):
         u, v, w= map(int,read().split())    
-        if v-1 in C[u-1]:
-            C[u-1][v-1]= min(C[u-1][v-1], w)
-        else:
-            C[u-1][v-1]= w
-            
-    def dijkstra():
-        while False in V:
-            u= None; v= None
-            minC = 11
-            remove=[]
-            
-            for s in S:
-                for key, value in C[s].items():
-                    if V[key]:
-                        remove.append([s,key])
-                        continue
-                    
-                    if value<minC:
-                        minC = value
-                        u = s; v = key
-                        
-            if minC == 11:
-                break
-            
-            for data in remove:
-                del C[data[0]][data[1]]
+        graph[u-1].append((v-1,w))
+        
+    def dijkstra(start):
+        heap=[]
+        heapq.heappush(heap,(0,start))  
                 
-            S.append(v)
-            D[v] = D[u] + minC
-            V[v] = True
-            del C[u][v]
+        while heap:
+            wei, now= heapq.heappop(heap)
             
-            for key, value in C[v].items():
-                if D[key] == 'INF':
-                    D[key] = D[v] + value
-                else:
-                    D[key] = min(D[key], D[v]+ value)
-    dijkstra()
-    return D
+            if dist[now] < wei:
+                continue
+            
+            else:
+                dist[now]  = wei
+                for nextNode, w in graph[now]:
+                    nextwei = w + dist[now]
+                    if dist[nextNode] < nextwei:
+                        continue
+                    else:
+                        dist[nextNode] = nextwei
+                        heapq.heappush(heap,(nextwei, nextNode))
+    dijkstra(s)
+    return dist     
+        
     
-r = sol()
-for v in r:
-    print(v)
+arr = sol()
+for val in arr:
+    if val == INF:
+        print('INF')
+    else:
+        print(val)
