@@ -22,7 +22,7 @@ def makeAcmicpcProblem():
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     title = str(soup.select('title'))
-
+    print(title)
     problem_num = url[32:]
     problem_name= title[len(problem_num)+11:-9]
     

@@ -1,6 +1,7 @@
 #heapq 사용한 풀이
 import sys; read= sys.stdin.readline
 import heapq
+
 INF = sys.maxsize
 
 def sol():
@@ -27,7 +28,6 @@ def sol():
                 continue
             
             else:
-                dist[now]  = wei
                 for nextNode, w in graph[now]:
                     nextwei = w + dist[now]
                     if dist[nextNode] < nextwei:

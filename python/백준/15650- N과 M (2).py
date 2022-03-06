@@ -1,22 +1,11 @@
-N, M = map(int,input().split())
-nums = [i for i in range(1, N+1)]
-
-arr= [0] * M
-data = list()
-Zero= 0
-
-def recurse(hight: int, repeat_list : list , arr : list, MAX : int , result : list) -> None:
-    for i in range(len(repeat_list)):
-        arr[hight] = repeat_list[i]
-
-        if hight < MAX - 1:
-            recurse(hight +1, repeat_list[i+1:], arr, MAX, result)
-        else:
-            result.append(arr.copy())
-
-recurse(Zero, nums, arr, M, data)
-
-for each_list in data:
-    for value in each_list:
-        print(value, end= ' ')
-    print()
+def dfs(start):
+    if len(stack)==m:
+        print(*stack)
+        return
+    for i in range(start,n+1):
+        stack.append(i-1)
+        dfs(i+1)
+        stack.pop()
+n,m=map(int,input().split())
+stack=[]
+dfs(1)
