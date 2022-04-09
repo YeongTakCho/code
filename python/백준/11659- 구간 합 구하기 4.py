@@ -1,15 +1,28 @@
-import sys
-read=sys.stdin.readline
+import sys; read=sys.stdin.readline
 
-n,m=map(int,read().split())
+N,M=map(int,read().split())
+n= list(map(int,read().strip().split()))
+result =[]
 
-result=list()
+"""
+    #try1. TC = M * N
+    
+    for _ in range(M): # TC= M
+        i, j = map(int,read().strip().split())
+        result.append(sum(n[i-1:j])) # TC= N
+    for v in result:
+        print(v)
+"""
 
+#try2. DP. TC= N + M
+dp =[0,n[0]]
 
-N=list(map(int,read().split()))
-for _ in range(m):
-    i,j=map(int,read().split())
+for cnt in range(1,N): # TC = N
+    dp.append(dp[cnt] + n[cnt])
 
-    result.append(sum(N[i-1:j]))
+for _ in range(M): # TC= M
+    i, j = map(int,read().strip().split())
+    result.append(dp[j]- dp[i-1])
+    
 for v in result:
     print(v)
