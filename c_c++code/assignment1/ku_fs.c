@@ -10,8 +10,8 @@
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <sys/wait.h>
-#include "sample.h"
-//#include <ku_fs_input.h> //code for submit
+// #include "sample.h" //code for test
+#include "ku_fs_input.h" //code for submit
 
 void bubble_sort(int arr[], int count)    
 {
@@ -41,6 +41,7 @@ int main(int argc, char* argv[]){
     size_t buf_len;
 
     struct{
+        long id;
         int value;
     }mymsg;
 
@@ -56,7 +57,7 @@ int main(int argc, char* argv[]){
     for (int cnt=0; cnt<atoi(argv[2]); cnt++){
         if(fork() ==0){
             int send_num=0;
-            printf("fork %d is start \n" ,cnt);
+            // printf("fork %d is start \n" ,cnt);
             for(int i= cnt * cNum; i< (cnt+1) * cNum; i++){
                 if (i > maxiter) continue;
 
@@ -69,8 +70,9 @@ int main(int argc, char* argv[]){
                     }
                     if (k ==0){
                         send_num+=1;
+                        mymsg.id= i;
                         mymsg.value = i;
-                        printf("message: %d\n", i);
+                        // printf("message: %d\n", i);
                         if( msgsnd(mqdes, &mymsg, buf_len, 0) == -1 ){
                             perror("msgsnd()");
                             exit(0);
@@ -84,22 +86,23 @@ int main(int argc, char* argv[]){
     for(int i=0; i<atoi(argv[2]); i++){
         pid_t wpid= wait(&child_status);
         max_id += WEXITSTATUS(child_status);
-        printf("child terminated with exit status %d\n",WEXITSTATUS(child_status));
+        // printf("child terminated with exit status %d\n",WEXITSTATUS(child_status));
     }
-    printf("max_id : %d\n",max_id);
+    
+    // printf("max_id : %d\n",max_id);
     for(int i=0; i<max_id; i++){
-        if( msgrcv(mqdes, &mymsg, buf_len, i+1, 0) == -1 ){
+        if( msgrcv(mqdes, &mymsg, buf_len, 0, 0) == -1 ){
                 perror("msgrcv()");
                 exit(0);
             }
         else{
             arrived_msg[i]= mymsg.value;
-            printf("msg recived\n");
+            // printf("msg recived\n");
         }
-           
+
     }
     
-    bubble_sort(arrived_msg,sizeof(int) * max_id);
+    bubble_sort(arrived_msg, max_id);
 
     for(int i=0; i<max_id;i++){
         printf("%d\n",arrived_msg[i]);
