@@ -33,20 +33,30 @@ center_frame= Frame(
 )
 center_frame.place(x= utils.width_pct(20), y= utils.height_pct(20))
 
-cells=[]
 for x in range(settings.GRID_SIZE):
     for y in range(settings.GRID_SIZE):
         c= Cell(x, y)
-        cells.append(c)
         c.create_btn_object(center_frame)
         c.cell_btn_object.grid(
             column= y, row=x
         )
 
 Cell.randomize_mines()
-for c in Cell.all:
-    print(c, end='')
+Cell.create_cell_life_mine_flag_count_label(left_frame)
+Cell.cell_count_label_object.grid(
+    column= 0 , row =0
+)
 
+Cell.life_count_label_object.grid(
+    column= 0 , row =1
+)
+Cell.mine_label_object.grid(
+    column= 0 , row =2
+)
+
+Cell.flag_count_label_object.grid(
+    column= 0 , row =3
+)
 
 
 # Run the window
