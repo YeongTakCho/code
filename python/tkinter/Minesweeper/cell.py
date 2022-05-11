@@ -1,7 +1,7 @@
-from tkinter import Button
+from tkinter import Button, PhotoImage
 import random
-from typing import overload
 import settings
+
 
 class Cell:
     all=[]
@@ -21,8 +21,8 @@ class Cell:
             location,
             width= 12,
             height= 4,
-            bg= 'white',
-            text=f"{self.x}, {self.y}"
+            bg= 'gray',
+            text=f""
         )
         btn.bind('<Button-1>', self.left_click_actions)
         btn.bind('<Button-3>', self.right_click_actions)
@@ -31,37 +31,63 @@ class Cell:
     def left_click_actions(self, event):
         print("click left")
         if self.is_open:
-            pass
+            return
+        
+        self.is_open =True
+        
         if self.is_mine:
-            # finish the game
-            self.cell_btn_object["location"]["bg"] = 'red'
-        
-        self.cell_btn_object['text']=f'{self.get_near_mine(self,self.x,self.y)}'        
+            self.cell_btn_object["bg"]= 'red'
+
+        else:
+            near_mine= self.near_mine()
+            self.cell_btn_object["text"] = f'{near_mine}'
+            self.cell_btn_object["bg"]= 'white'
             
-    def get_near_mine(self,x,y):
-        from main import cells
-        near_mine=0        
-        for i in [-1,0,1]:
-            for j in [-1,0,1]:
-                ny= y+i
-                nx= x+i
-                if ny>= 0 and ny< settings.GRID_SIZE and nx>=0 and nx< settings.GRID_SIZE:
-                    state = ny * settings.GRID_SIZE + nx
-                    print(f'{state} is mine')
-                    if cells[state].is_mine:
-                        near_mine+=1            
-        return near_mine
-                
-        
-               
+            if near_mine ==0:
+                for cell in self.surrounded_cells():
+                    cell.left_click_actions(None)
+    
+    
+            
     def right_click_actions(self, event):
+
         print("right click - flag")
         if self.is_open:
-            pass
+            return
+            
         if self.cell_btn_object["bg"] == 'purple':
-            self.cell_btn_object["bg"] = 'white'
-        else:
-            self.cell_btn_object["bg"] = 'purple'
+            self.cell_btn_object["bg"] = 'gray'
+            
+        else: self.cell_btn_object["bg"] = 'purple'
+
+
+    def near_mine(self):
+        n_mines =0
+        for cell in  self.surrounded_cells():
+            if cell.is_mine:
+                n_mines+=1
+        return n_mines
+    
+    
+    def surrounded_cells(self):
+        cells= []
+        for y in [-1,0,1]:
+            for x in [-1,0,1]:
+                if x==0 and y ==0:
+                    continue
+                nx = self.x +x 
+                ny = self.y +y
+                cells.append(self.get_cell_by_axis(nx,ny))
+                
+        return [cell for cell in cells if cell is not None]
+    
+            
+    def get_cell_by_axis(self, x ,y):
+        for cell_object in self.all:
+            if cell_object.x == x and cell_object.y == y:
+                return cell_object
+
+   
          
     @staticmethod
     def randomize_mines():
