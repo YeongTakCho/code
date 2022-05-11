@@ -1,15 +1,8 @@
-from cProfile import label
 from tkinter import Button, Label
 import random
 import settings
 
-# !!! need to do more !!!
-#
-# 1. finish if find every mine                  (o)
-# 2. finish if click the mine                   (x)    
-# 3. save the record                            (x)
-# 4. put image or change fond in button         (x)
-# 5. ui on left, top frame                      (¤±)
+
     
 class Cell:
     all=[]
@@ -23,9 +16,9 @@ class Cell:
     left_life_count = settings.LIFE_COUNT
     flag_count = 0
     
-    def __init__(self, x, y, is_mine= False, is_open = False):
-        self.is_mine = is_mine
-        self.is_open = is_open
+    def __init__(self, x, y):
+        self.is_mine = False
+        self.is_open = False
         self.cell_btn_object= None
         self.x= x
         self.y= y
@@ -49,12 +42,20 @@ class Cell:
     def left_click_actions(self, event):
         if self.is_open:
             return
-        
         self.is_open =True
+        
         if self.cell_btn_object["bg"]== 'purple':
             Cell.flag_count-=1
             Cell.refresh_flag_count()
-            
+        
+        self.show_cell()
+        
+        if Cell.left_cell_count ==0:
+            Cell.store_data()
+            Cell.reset_game()
+
+
+    def show_cell(self):
         if self.is_mine:
             self.cell_btn_object["bg"]= 'red'
             self.cell_btn_object["text"]= text="MINE!!"
@@ -63,28 +64,24 @@ class Cell:
                 Cell.refresh_life_count()
             else:
                 Cell.refresh_life_count(is_alive =False)
+                #interrupt the game and display a message that player lost
+                
             return # end the game
         
-        self.cell_btn_object["bg"]= 'white'
-        near_mine= self.near_mine()
-        self.cell_btn_object["text"] = f'{near_mine}'
         Cell.left_cell_count -=1
+        near_mine= self.near_mine()
+        self.cell_btn_object["bg"]= 'white'
+        self.cell_btn_object["text"] = f'{near_mine}'
         if Cell.left_cell_count >0:
             Cell.refresh_cell_count()
         else:
             Cell.refresh_cell_count(is_left = False)
-
-        if near_mine ==0:
-            for cell in self.surrounded_cells():
-                cell.left_click_actions(None)
-                
-        
-        if Cell.left_cell_count ==0:
-            Cell.store_data()
-            Cell.reset_game()
-
-
             
+        if near_mine ==0:
+            for cell in self.surrounded_cells:
+                cell.left_click_actions(None)
+
+
     def right_click_actions(self, event):
 
         if self.is_open:
@@ -102,12 +99,13 @@ class Cell:
 
     def near_mine(self):
         n_mines =0
-        for cell in  self.surrounded_cells():
+        for cell in  self.surrounded_cells:
             if cell.is_mine:
                 n_mines+=1
         return n_mines
     
-    
+    @property
+    @staticmethod
     def surrounded_cells(self):
         cells= []
         for y in [-1,0,1]:
@@ -134,11 +132,36 @@ class Cell:
             # mine_object.cell_btn_object["text"]= text="MINE!!"
             
     @staticmethod
+    def create_label_object(location, text_input = ''):
+        lbl = Label(
+            location,
+            text= text_input,
+            bg= 'black',
+            fg= 'white',
+            font= ("", 20),
+
+        )
+        return lbl
+    
+    @staticmethod
+    def create_left_labels(location):
+        Cell.cell_count_label_object = Cell.create_label_object(location)
+        Cell.life_count_label_object = Cell.create_label_object(location)
+        Cell.mine_label_object = Cell.create_label_object(location,text_input=f'Mines are {settings.MINE_COUNT}')
+        Cell.flag_count_label_object = Cell.create_label_object(location)
+        
+        Cell.refresh_cell_count()
+        Cell.refresh_life_count()
+        Cell.refresh_flag_count()
+    
+    
+    @staticmethod
     def refresh_cell_count(is_left = True):
         if is_left:
             Cell.cell_count_label_object["text"] = f'Cells left: {Cell.left_cell_count}'
         else:
-            Cell.cell_count_label_object["text"] = 'CLEAR'
+            if Cell.left_life_count >0:
+                Cell.cell_count_label_object["text"] = 'CLEAR'
         return
     
     @staticmethod
@@ -152,41 +175,8 @@ class Cell:
     @staticmethod
     def refresh_flag_count():
         Cell.flag_count_label_object["text"]= f'Flags are: {Cell.flag_count}'
-
-    @staticmethod
-    def create_cell_life_mine_flag_count_label(location):
-        lbl_cell = Label(
-            location,
-            text = f'Cells left: {Cell.left_cell_count}',
-            width=  settings.LEFT_LABEL_WIDTH,
-            height= settings.LEFT_LABEL_HEIGHT
-        )
-        Cell.cell_count_label_object = lbl_cell
-
-        lbl_mine= Label(
-            location,
-            text = f'Mines are {settings.MINE_COUNT}',
-            width =  settings.LEFT_LABEL_WIDTH,
-            height =settings.LEFT_LABEL_HEIGHT
-        )
-        Cell.mine_label_object = lbl_mine
         
-        lbl_life= Label(
-            location,
-            text = f'Life left: {Cell.left_life_count}',
-            width =  settings.LEFT_LABEL_WIDTH,
-            height =settings.LEFT_LABEL_HEIGHT
-        )
-        Cell.life_count_label_object = lbl_life
-        
-        lbl_flag = Label(
-            location,
-            text = f'Flags are: {Cell.flag_count}',
-            width=  settings.LEFT_LABEL_WIDTH,
-            height= settings.LEFT_LABEL_HEIGHT
-        )
-        Cell.flag_count_label_object = lbl_flag
-    
+
     
     @staticmethod
     def store_data():

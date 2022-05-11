@@ -3,6 +3,19 @@ import settings
 import utils
 from cell import Cell
 
+# !!! need to do more !!!
+#
+# 1. finish if find every mine                  (o)
+# 2. finish if click the mine                   (x)    
+# 3. save the record                            (x)
+# 4. put image or change fond in button         (x)
+# 5. ui on left, top frame                      (x)
+
+# % need to learn more %
+# !!!  1. text size to pixel or make size changeable !!!
+# 2. changeable root geometry 
+# 3. put image in button
+
 root= Tk()
 root.configure(bg= "black")
 root.title('minesweeper game')
@@ -42,18 +55,16 @@ for x in range(settings.GRID_SIZE):
         )
 
 Cell.randomize_mines()
-Cell.create_cell_life_mine_flag_count_label(left_frame)
+Cell.create_left_labels(left_frame)
 Cell.cell_count_label_object.grid(
     column= 0 , row =0
 )
-
 Cell.life_count_label_object.grid(
     column= 0 , row =1
 )
 Cell.mine_label_object.grid(
     column= 0 , row =2
 )
-
 Cell.flag_count_label_object.grid(
     column= 0 , row =3
 )
