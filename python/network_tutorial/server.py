@@ -1,4 +1,3 @@
-from multiprocessing.dummy import current_process
 import socket 
 from _thread import * 
 import settings
